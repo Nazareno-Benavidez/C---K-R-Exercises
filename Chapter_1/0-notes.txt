@@ -1,0 +1,26 @@
+Local or automatic variables = variables of functions, an int i in main(). They are declared within a function and no other function can have direct
+access to them. They come to existence when the function is called, and then disappear when the function is exited. That's why they are 
+usually known as automatic variables. They don't retain their value from call to call, so, if you call a function that uses some int, like
+int i, the next call will have forgotten the value of i because the previous i value disappeared and now a new one is created. They contain
+garbage if they are not initialised.
+
+Extern or external variables = variables that are external to all functions, they can be accessed by name by any function. As they are
+globally accessible, you don't need to specify them as parameters when passing them to other functions, just directly change them in
+functions. They remain in existence permanently, so they retain their values even after the functions that set them have returned/exited.
+They must be defined once outside of any function; this make the compile set aside(reserva) storage for it, as they are being defined and
+not declared (in a variable declaration no memory is set aside, actually, this references the direction of the variable in memory). 
+They must be declared in each function that wants to access it; this states the type of the variable because the compiler doesn't 
+assume automatically the type of the global variables within each function unless it's told it. To illustrate:
+
+#include <stdio.h>
+
+int max;
+float speed = 7.6;
+char line[MAXLINE];
+
+int main()
+{
+    extern int max;
+    extern float speed;
+    extern char line[];
+}
