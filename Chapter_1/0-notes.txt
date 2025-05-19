@@ -4,7 +4,7 @@ usually known as automatic variables. They don't retain their value from call to
 int i, the next call will have forgotten the value of i because the previous i value disappeared and now a new one is created. They contain
 garbage if they are not initialised.
 
-Extern or external variables = variables that are external to all functions, they can be accessed by name by any function. As they are
+Extern, external or global variables = variables that are external to all functions, they can be accessed by name by any function. As they are
 globally accessible, you don't need to specify them as parameters when passing them to other functions, just directly change them in
 functions. They remain in existence permanently, so they retain their values even after the functions that set them have returned/exited.
 They must be defined once outside of any function; this make the compiler set aside(reserva) storage for it, as they are being defined and
