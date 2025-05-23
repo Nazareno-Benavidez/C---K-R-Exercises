@@ -23,27 +23,39 @@ int main()
 
 int my_get_line(char line[], char newline[], int maxline, int tab_width)
 {
-    int c, i, j;
+    int c, i, j, k;
     int next_tab_stop = tab_width;
     int counter = 0;
 
+    k = 0;
     for(i = 0; i < maxline-tab_width && (c = getchar()) != EOF && c != '\n'; i++)
         line[i] = c;
 
-    for(j = 0; j <= i && j < maxline-tab_width; j++){
+    for(j = 0; j < maxline-tab_width && k <= i; j++){
         next_tab_stop = ((j / tab_width) + 1) * tab_width;
-        if(line[j] == ' '){
-            while(line[j + counter] == ' '){
+        if(line[k] == ' '){
+            while(line[k] == ' '){
                 counter++;
+                k++;
             }
-            while(j + counter < next_tab_stop){
+            k--;
+            while(next_tab_stop <= (j + counter)){
                 next_tab_stop += tab_width;
                 newline[j] = '\t';
                 counter -= 4;
                 j++;
             }
+            while(counter > 0){
+                newline[j] = ' ';
+                j++;
+                counter--;
+            }
+            j--;
         }
+        else
+            newline[j] = line[k];
         counter = 0;
+        k++;
     }
 
     newline[j] = '\0';
