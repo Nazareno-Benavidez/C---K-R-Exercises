@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define MAXLINE 1000
-#define CUT_N 4
+#define CUT_N 80
 
 int my_get_line(char line[], char newline[], int maxline, int cut_n);
 
@@ -22,7 +22,7 @@ int main()
 int my_get_line(char line[], char newline[], int maxline, int cut_n)
 {
     int c, i, j, k, last_b;
-    int next_cut_n = cut_n;
+    int next_cut_n = cut_n-1;
     last_b = k = 0;
     for(i = 0; i < maxline-1 && (c = getchar()) != EOF && c !='\n'; i++)
         line[i] = c;
@@ -33,17 +33,21 @@ int my_get_line(char line[], char newline[], int maxline, int cut_n)
         if(line[k] == ' ')
             last_b = j;
         if(j >= next_cut_n){
-            if(last_b > 0){
+            if(last_b == j)
+                newline[j] = '\n';
+            else if(last_b > 0){
                 newline[last_b] = '\n';
+                newline[j] = line[k];
             }
             else{
                 newline[j] = '\n';
                 j++;
+                newline[j] = line[k];
             }
             last_b = 0;
             next_cut_n += cut_n;
         }
-        if(last_b != j)
+        else
             newline[j] = line[k];
         j++;
     }
