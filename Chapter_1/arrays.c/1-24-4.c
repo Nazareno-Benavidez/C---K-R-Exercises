@@ -48,59 +48,15 @@ void check_syntax(char code[], char opening, char ending)
     int last_token = 0;
     int unmatched_tokens = 0;
     bool matchedToken = false;
-    bool comment = false;
-
     extern int len;
 
     i = 0;
     for(k = 0; k < len; k++){
-        if(code[k] == '/' && code[k+1] == '/'){
-            while(code[k] != '\n' && k < len){
-                comment = true;
-                k++;
-            }
-            if(code[k] == '\n')
-                comment = false;
-            else
-                comment = true;
-        }
-        else if(code[k] == '/' && code[k+1] == '*'){
-            k+=2;
-            while((code[k] != '*' && code[k+1] != '/') && k < len){
-                comment = true;
-                k++;
-            }
-            if(code[k] == '*' && code[k+1] == '/'){
-                comment = false;
-                k+=2;
-            }
-            else
-                comment = true;
-        }
         i = k;
-        if(code[k] == opening && comment == false){
+        if(code[k] == opening){
             i++;
             while(code[k] == opening && matchedToken == false && i < len){
-                if(code[i] == '/' && code[i+1] == '/'){
-                    while(code[i] != '\n' && i < len){
-                        comment = true;
-                        i++;
-                    }
-                    if(code[i] == '\n')
-                        comment = false;
-                }
-                else if(code[i] == '/' && code[i+1] == '*'){
-                    i+=2;
-                    while((code[i] != '*' && code[i+1] != '/') && i < len){
-                        comment = true;
-                        i++;
-                    }
-                    if(code[i] == '*' && code[i+1] == '/'){
-                        comment = false;
-                        i+=2;
-                    }
-                }
-                else if(code[i] == ending && i > last_token && comment == false){
+                if(code[i] == ending && i > last_token){
                     last_token = i;
                     matchedToken = true;
                 }
@@ -121,7 +77,6 @@ void check_esc_seq(char code[])
     int k, i;
     int unmatched_esc_seq = 0;
     bool unmatched_esc = false;
-    bool comment = false;
 
     i = 0;
 
@@ -164,9 +119,9 @@ void check_comments(char code[])
                 k+=2;
             else{
                 unmatched_comments++;
-                break;  
-            }    
+                break;    
+            }  
         }
     }
     printf("\nNumber of unmatched COMMENTS: %d\n", unmatched_comments);
-} 
+}
