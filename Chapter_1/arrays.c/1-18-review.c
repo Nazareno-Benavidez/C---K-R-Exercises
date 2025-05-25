@@ -27,4 +27,3 @@ int my_get_line(char line[], int maxline)
     line[i] = '\0';
     return i;
 }
-
