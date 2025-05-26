@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define MAXLEN 1000
+#define MAXLEN 1000 // Max code(input) length
 
-int len;
+int len; // code[] length
 
 void my_get_code(char code[], int maxlen);
-void check_syntax(char code[], char opening, char ending);
+void check_tokens(char code[], char opening, char ending);
 void check_esc_seq(char code[]);
 void check_comments(char code[]);
 
@@ -20,11 +20,11 @@ int main()
 
     my_get_code(code, MAXLEN);
 
-    check_syntax(code, '{', '}');
-    check_syntax(code, '(', ')');
-    check_syntax(code, '[', ']');
-    check_syntax(code, '\'', '\'');
-    check_syntax(code, '\"', '\"'); 
+    check_tokens(code, '{', '}');
+    check_tokens(code, '(', ')');
+    check_tokens(code, '[', ']');
+    check_tokens(code, '\'', '\'');
+    check_tokens(code, '\"', '\"'); 
     check_esc_seq(code);
     check_comments(code);
 
@@ -46,24 +46,70 @@ void my_get_code(char code[], int maxlen)
 char opening = desired token('(', '{', '[', etc)
 char closing = desired token closing (')', '}', ']', etc)
 */
-void check_syntax(char code[], char opening, char closing)
+void check_tokens(char code[], char opening, char closing)
 {
-    int i, k; // 'i' is used to look for a closing token for a 'k' opening token 
-    int last_token = 0; // last closing token/delimiter found (like, '}', ']', ')')
+    int i, k; // 'i' is used to look for a closing token for opening token 'k'  (code[k])
+    int last_token = 0; // The position of the last closing token/delimiter found (like, '}', ']', ')')
     int unmatched_tokens = 0; // number of missing closing tokens
     bool matchedToken = false;  
+    bool comment = false;
+
     extern int len; // code[] length
 
     i = 0;
     for(k = 0; k < len; k++){ 
         i = k; // i gets the current value of k each for iterations
-
+        if(code[k] == '/' && code[k+1] == '/'){
+            k+=2;
+            while(code[k] != '\n' && k < len)
+                k++;
+            if(code[k] == '\n'){
+                comment = false;
+            }
+            else
+                comment = true;
+            i = k
+        }
+        else if(code[k] == '/' && code[k+1] == '*'){
+            k+=2;
+            while((code[k] != '*' && code[k+1] != '/') && k < len)
+                k++;
+            if(code[k] == '*' && code[k+1] == '/'){
+                comment = false;
+                k++;
+            }
+            else
+                comment = true;
+            i = k;
+        }
         // if code[k] is an opening token, look for its closing token
-        if(code[k] == opening){ 
+        else if(code[k] == opening && comment == false){ 
             i++; // increase 'i' (read until 'k' closing token index is found)
             // While closing token hasn't been found, increase 'i' until it's found. Else, increase unmatched_tokens, as there's a missing token
             while(code[k] == opening && matchedToken == false && i < len){ 
-                if(code[i] == closing && i > last_token){ /* if closing token is found and it's not the previous token found, like: {{ } -> '}' would not be the closing token of the second '{'*/
+                if(code[i] == '/' && code[i+1] == '/'){
+                    i+=2;
+                    while(code[i] != '\n' && i < len)
+                        i++;
+                    if(code[i] =='\n')
+                        comment = false;
+                    else 
+                        comment = true;
+                    k = i;
+                }
+                 else if(code[i] == '/' && code[i+1] == '*'){
+                    i+=2;
+                    while((code[i] != '*' && code[i+1] != '/') && i < len)
+                        i++;
+                    if(code[i] == '*' && code[i+1] == '/'){
+                        comment = false;
+                        i++;
+                    }
+                    else
+                        comment = true;
+                    k = i;
+                }
+                else if(code[i] == closing && i > last_token){ /* if closing token is found and it's not the previous token found, like: {{ } -> '}' would not be the closing token of the second '{'*/
                     last_token = i; // as current closing token isn't a repeated one, as it's in an index greater than the previous one, update it
                     matchedToken = true; 
                 }
