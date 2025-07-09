@@ -68,7 +68,7 @@ void check_tokens(char code[], char opening, char closing)
             }
             else
                 comment = true;
-            i = k
+            i = k;
         }
         else if(code[k] == '/' && code[k+1] == '*'){
             k+=2;

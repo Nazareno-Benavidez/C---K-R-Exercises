@@ -1,0 +1,9 @@
+If the variable in question is not automatic, the initialization is done once only, conceptionally before the
+program starts executing, and the initializer must be a constant expression. An explicitly initialized automatic
+variable is initialized each time the function or block it is in is entered; the initializer may be any expression.
+External and static variables are initialized to zero by default. Automatic variables for which is no explicit
+initializer have undefined (i.e., garbage) values.
+
+The const declaration can also be used with array arguments, to indicate that the function does not change
+that array; i.e.:
+int strlen(const char[]);
