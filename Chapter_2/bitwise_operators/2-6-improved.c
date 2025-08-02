@@ -1,6 +1,13 @@
 //readable version of 2-6.c
 #include <stdio.h>
 
+
+/*
+ * The function and variables use 'unsigned int' because we are manipulating raw bit patterns.
+ * Using unsigned types ensures well-defined behavior for bitwise operations and shifts,
+ * avoids sign-extension issues, and clearly indicates that these values represent bits,
+ * not signed numbers.
+ */
 unsigned int my_set_bits(unsigned int x, int p, int n, unsigned int y); // "my_" in case there's already a set_bits function in stdio.h
 /* Exercise 2−6. Write a function setbits(x,p,n,y) that returns x with the n bits that begin at position p
 set to the rightmost n bits of y, leaving the other bits unchanged. */
