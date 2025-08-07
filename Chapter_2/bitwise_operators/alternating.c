@@ -10,7 +10,7 @@ unsigned int has_alternating_bits(int x);
 */
 int main()
 {
-    int x = 2863311530;
+    int x = 1431655765; //2863311530
 
     printf("%u", has_alternating_bits(x));
 
@@ -25,6 +25,7 @@ unsigned int has_alternating_bits(int x)
         counter++;
         prev_bit = (x>>i) & 1;
     }
+   // printf("counter: %u", counter);
     if(counter == INT_BITS)
         return 1;
     else
